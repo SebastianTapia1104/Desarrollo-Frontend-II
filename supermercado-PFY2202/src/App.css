@@ -1057,10 +1057,6 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-.bento--productos > li:first-child {
-  grid-column: 1 / -1;
-}
-
 .bento--productos .tarjeta {
   height: 100%;
 }
@@ -1221,8 +1217,7 @@
 
   .celda--hero,
   .celda--banda,
-  .celda--doble,
-  .bento--productos > li:first-child {
+  .celda--doble {
     grid-column: 1 / -1;
     grid-row: auto;
   }
@@ -1240,9 +1235,12 @@
   .bento--mensajes,
   .bento--ingreso,
   .bento--partes,
-  .bento--productos,
   .bento--guia {
     grid-template-columns: 1fr;
+  }
+
+  .bento--productos {
+    grid-template-columns: 1fr 1fr;
   }
 
   .bento--sedes {

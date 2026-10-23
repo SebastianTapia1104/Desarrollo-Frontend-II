@@ -27,7 +27,7 @@ export const PRODUCTOS_INICIALES = [
   },
   {
     id: "pan-hallulla",
-    nombre: "Hallulla familiar",
+    nombre: "Pan de molde 750 gr",
     categoria: "Panadería",
     sku: "PN-2201",
     precio: 1590,
@@ -36,11 +36,11 @@ export const PRODUCTOS_INICIALES = [
     pasillo: "1",
     unidad: "un",
     descripcion:
-      "Hallulla horneada en la mañana. La panadería del pasillo 1 se revisa antes del mediodía, cuando baja más rápido.",
+      "Pan de molde envasado de 750 gr. Se cuenta por unidad en la panadería del pasillo 1.",
   },
   {
     id: "palta-hass",
-    nombre: "Palta Hass (malla 1 kg)",
+    nombre: "Palta Hass (Malla 1 kg)",
     categoria: "Frutas y verduras",
     sku: "FV-3310",
     precio: 3990,
@@ -53,16 +53,16 @@ export const PRODUCTOS_INICIALES = [
   },
   {
     id: "tomate-kilo",
-    nombre: "Tomate larga vida",
+    nombre: "Tomate larga vida (Malla 1 kg)",
     categoria: "Frutas y verduras",
     sku: "FV-3402",
     precio: 1290,
     stock: 34,
     stockObjetivo: 40,
     pasillo: "2",
-    unidad: "kg",
+    unidad: "un",
     descripcion:
-      "Tomate a granel. El stock se controla en kilos y se pesa en la balanza de frutas y verduras.",
+      "Malla cerrada de 1 kg. Se vende por unidad, sin pasar por la balanza.",
   },
   {
     id: "arroz-tucapel",
@@ -92,7 +92,7 @@ export const PRODUCTOS_INICIALES = [
   },
   {
     id: "cafe-nescafe",
-    nombre: "Café instantáneo 170 g",
+    nombre: "Café instantáneo 170 gr",
     categoria: "Abarrotes",
     sku: "AB-4512",
     precio: 4590,
@@ -105,7 +105,7 @@ export const PRODUCTOS_INICIALES = [
   },
   {
     id: "fideos-carozzi",
-    nombre: "Espagueti 400 g",
+    nombre: "Espagueti 400 gr",
     categoria: "Abarrotes",
     sku: "AB-4604",
     precio: 990,
@@ -118,7 +118,7 @@ export const PRODUCTOS_INICIALES = [
   },
   {
     id: "pollo-entero",
-    nombre: "Pollo entero fresco",
+    nombre: "Bandeja de pechuga deshuesada 850 gr",
     categoria: "Carnes",
     sku: "CA-5103",
     precio: 4990,
@@ -127,7 +127,7 @@ export const PRODUCTOS_INICIALES = [
     pasillo: "7",
     unidad: "un",
     descripcion:
-      "Pollo entero refrigerado. Se mantiene en vitrina y se descuenta al venderlo en caja.",
+      "Bandeja envasada de 850 gr. El peso ya viene fijado y se descuenta por unidad en la vitrina.",
   },
   {
     id: "detergente-omo",

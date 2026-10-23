@@ -31,7 +31,14 @@ function leerInventario() {
           producto.stockPorSala &&
           SALAS.every((sala) => typeof producto.stockPorSala[sala.id] === "number")
       );
-    return valido ? datos : semilla();
+    if (!valido) return semilla();
+    return PRODUCTOS_INICIALES.map((producto) => {
+      const guardado = datos.find((item) => item.id === producto.id);
+      return {
+        ...producto,
+        stockPorSala: guardado?.stockPorSala ?? stockInicial(producto.stock),
+      };
+    });
   } catch {
     return semilla();
   }
