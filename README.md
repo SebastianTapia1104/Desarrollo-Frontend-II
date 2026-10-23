@@ -1,33 +1,32 @@
 # Supermercado PFY2202
 
-Sitio de **Supermercado PFY2202** para la actividad formativa de Desarrollo Frontend II (PFY2202), semana 1: *Utilizando tecnologías avanzadas de React en sitios web*.
+Sitio de inventario de **Supermercado PFY2202**, desarrollado para la actividad formativa de Desarrollo Frontend II (PFY2202), semana 1: *Utilizando tecnologías avanzadas de React en sitios web*.
 
-La aplicación está en la carpeta `supermercado-PFY2202`. Este README queda en la raíz del repositorio, que es la carpeta del curso.
+La aplicación está en `supermercado-PFY2202`.
 
-El home es el inventario de tres salas: San Bernardo, La Pintana y Puente Alto. El menú inferior navega a las dos páginas elegidas de la lista de la forma B:
+El inicio muestra el inventario de tres salas: San Bernardo, La Pintana y Puente Alto. El menú inferior abre tres secciones:
 
+- Inventario
 - Quiénes somos
 - Contactos
 
-Cada sala tiene su propio usuario. El stock solo se modifica con la sesión de esa sala. En Contactos, los datos de las sedes se ven siempre. Las consultas internas parten como pendientes y se cierran cuando las dos partes las marcan como resueltas.
+Cada sala tiene su propio usuario. El stock de una sala solo cambia con la sesión de esa sala. En Contactos, los datos de las sedes se muestran siempre. Las consultas entre salas, o con administración, parten como pendientes y se cierran cuando las dos partes las marcan como resueltas.
 
 ## Rutas
 
 | Ruta | Qué muestra |
 | --- | --- |
 | `/` | Inventario de la sala elegida |
-| `/quienes-somos` | Historia y cómo usar el sitio |
-| `/contactos` | Datos de las sedes y historial de consultas |
+| `/quienes-somos` | Historia de la cadena y uso del sitio |
+| `/contactos` | Datos de las sedes e historial de consultas |
 | `/contactos/:id` | Hilo de una consulta |
-| `/ingresar` | Acceso de sala o administración |
+| `/ingresar` | Acceso de una sala o de administración |
 | `/producto/:sala/:id` | Ficha de un producto en una sala |
 | cualquier otra | Página no encontrada |
 
-La navegación usa **React Router v6** (`BrowserRouter`, `Routes`, `Route`, `Link`, `useLocation` y `useNavigate`). Los enlaces del menú no recargan el sitio. La ruta `*` queda al final.
+La navegación usa React Router v6 (`BrowserRouter`, `Routes`, `Route`, `Link`, `useLocation` y `useNavigate`). El menú cambia de sección sin recargar el sitio. La ruta `*` queda al final.
 
-## Cómo ejecutarlo
-
-Desde la carpeta de la aplicación:
+## Ejecución
 
 ```bash
 cd supermercado-PFY2202
@@ -35,21 +34,12 @@ npm install
 npm start
 ```
 
-También sirve `npm run dev`. La aplicación queda en `http://localhost:5173`.
+`npm run dev` hace lo mismo. El sitio queda en `http://localhost:5173`.
 
 `npm run build` genera la versión de producción en `supermercado-PFY2202/dist`.
 
-## Qué subir al repositorio
+## Publicación
 
-La raíz del repositorio es esta carpeta. No hace falta subir `node_modules` ni `dist`: se regeneran con `npm install` y `npm run build`. El archivo `.gitignore` ya los excluye, junto con los PDF del curso.
+GitHub Actions publica el sitio al recibir un push en `main`. El flujo está en `.github/workflows/pages.yml`: instala la aplicación, la construye y despliega `dist` en GitHub Pages.
 
-## Publicar el sitio en GitHub Pages
-
-El flujo está en `.github/workflows/pages.yml`. Construye `supermercado-PFY2202` y publica `dist`.
-
-1. Crea el repositorio en GitHub y súbelo con la rama `main`.
-2. En el repositorio, abre **Settings → Pages** y deja el origen en **GitHub Actions**.
-3. Al hacer push a `main`, la acción publica el sitio.
-4. La dirección queda en `https://USUARIO.github.io/NOMBRE-DEL-REPOSITORIO/`.
-
-En local la base de las rutas sigue siendo `/`. En Pages, la construcción usa el nombre del repositorio para que los enlaces y el favicon apunten dentro de esa carpeta. Si alguien abre una ruta directo (por ejemplo `/quienes-somos`) y GitHub responde 404, `404.html` devuelve la aplicación a esa misma ruta.
+La dirección publicada es `https://<usuario>.github.io/<repositorio>/`. En ese entorno la base de las rutas es el nombre del repositorio. En local la base sigue siendo `/`. Si Pages no encuentra una ruta del cliente, `404.html` devuelve la aplicación a esa misma dirección.
