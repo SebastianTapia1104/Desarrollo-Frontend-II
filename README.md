@@ -26,20 +26,8 @@ Cada sala tiene su propio usuario. El stock de una sala solo cambia con la sesi�
 
 La navegación usa React Router v6 (`BrowserRouter`, `Routes`, `Route`, `Link`, `useLocation` y `useNavigate`). El menú cambia de sección sin recargar el sitio. La ruta `*` queda al final.
 
-## Ejecución
-
-```bash
-cd supermercado-PFY2202
-npm install
-npm start
-```
-
-`npm run dev` hace lo mismo. El sitio queda en `http://localhost:5173`.
-
-`npm run build` genera la versión de producción en `supermercado-PFY2202/dist`.
-
 ## Publicación
 
 GitHub Actions publica el sitio al recibir un push en `main`. El flujo está en `.github/workflows/pages.yml`: instala la aplicación, la construye y despliega `dist` en GitHub Pages.
 
-La dirección publicada es `https://<usuario>.github.io/<repositorio>/`. En ese entorno la base de las rutas es el nombre del repositorio. En local la base sigue siendo `/`. Si Pages no encuentra una ruta del cliente, `404.html` devuelve la aplicación a esa misma dirección.
+La dirección publicada es `https://sebastiantapia1104.github.io/Desarrollo-Frontend-II/`. En ese entorno la base de las rutas es el nombre del repositorio. En local la base sigue siendo `/`. Si Pages no encuentra una ruta del cliente, `404.html` devuelve la aplicación a esa misma dirección.
