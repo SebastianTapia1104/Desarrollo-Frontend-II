@@ -1,0 +1,9 @@
+node_modules/
+dist/
+dist-ssr/
+*.local
+*.log
+.DS_Store
+
+# Material del curso: se queda en el computador y no entra al repositorio.
+*.pdf

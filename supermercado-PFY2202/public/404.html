@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <title>Supermercado PFY2202</title>
+    <script>
+      // GitHub Pages no tiene las rutas de React. Esta página guarda la ruta y vuelve a index.
+      var segmentosDelRepositorio = 1;
+      var ubicacion = window.location;
+      ubicacion.replace(
+        ubicacion.protocol +
+          "//" +
+          ubicacion.hostname +
+          (ubicacion.port ? ":" + ubicacion.port : "") +
+          ubicacion.pathname.split("/").slice(0, 1 + segmentosDelRepositorio).join("/") +
+          "/?/" +
+          ubicacion.pathname
+            .slice(1)
+            .split("/")
+            .slice(segmentosDelRepositorio)
+            .join("/")
+            .replace(/&/g, "~and~") +
+          (ubicacion.search ? "&" + ubicacion.search.slice(1).replace(/&/g, "~and~") : "") +
+          ubicacion.hash
+      );
+    </script>
+  </head>
+  <body></body>
+</html>

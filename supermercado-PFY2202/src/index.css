@@ -1,0 +1,94 @@
+:root {
+  --verde: #1e3f32;
+  --verde-oscuro: #13281f;
+  --verde-suave: #e4e0cc;
+  --caqui: #c6b07a;
+  --caqui-oscuro: #8d774c;
+  --crema: #ebe2cc;
+  --papel: #f7f1e3;
+  --tinta: #1a2118;
+  --tinta-suave: #5c5648;
+  --linea: #cbb992;
+  --ambar: #7a4e12;
+  --ambar-suave: #f0e4c4;
+  --rojo: #7d3428;
+  --rojo-suave: #f4e4de;
+  --sombra: none;
+  --radio: 18px;
+  --fuente: "Literata", Georgia, serif;
+  --fuente-ui: "Barlow", "Segoe UI", sans-serif;
+  --fuente-titulo: "Fraunces", Georgia, serif;
+  --menu-alto: 4.4rem;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--fuente);
+  color: var(--tinta);
+  background-color: #e4dcc4;
+  background-image: none;
+}
+
+button,
+input,
+select,
+textarea,
+.boton,
+.chip,
+.eyebrow,
+.menu-inferior__link,
+.pill,
+.tabla th,
+.encabezado__sala,
+.encabezado__salir {
+  font-family: var(--fuente-ui);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  font-family: var(--fuente-ui);
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+:focus-visible {
+  outline: 2px solid var(--caqui-oscuro);
+  outline-offset: 3px;
+}
