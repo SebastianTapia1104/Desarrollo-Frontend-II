@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { CONSULTAS_INICIALES } from "../data/consultasIniciales.js";
 import { destinosDe } from "../data/salas.js";
+import { guardarLocal } from "../utils/almacen.js";
 import { useSesion } from "./SesionContext.jsx";
 
 const CLAVE = "pfy2202-consultas";
@@ -31,7 +32,7 @@ export function ConsultasProvider({ children }) {
   const [consultas, setConsultas] = useState(leerConsultas);
 
   useEffect(() => {
-    localStorage.setItem(CLAVE, JSON.stringify(consultas));
+    guardarLocal(CLAVE, consultas);
   }, [consultas]);
 
   function crearConsulta({ para, asunto, mensaje }) {

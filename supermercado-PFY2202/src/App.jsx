@@ -9,7 +9,9 @@ import DetalleProducto from "./pages/DetalleProducto.jsx";
 import Ingreso from "./pages/Ingreso.jsx";
 import Inicio from "./pages/Inicio.jsx";
 import NoEncontrado from "./pages/NoEncontrado.jsx";
+import NuevoArticulo from "./pages/NuevoArticulo.jsx";
 import QuienesSomos from "./pages/QuienesSomos.jsx";
+import TablaArticulos from "./pages/TablaArticulos.jsx";
 import "./App.css";
 
 const raiz = import.meta.env.BASE_URL.replace(/\/$/, "");
@@ -29,6 +31,9 @@ export default function App() {
                 <Route path="/contactos/:id" element={<DetalleConsulta />} />
                 <Route path="/ingresar" element={<Ingreso />} />
                 <Route path="/producto/:sala/:id" element={<DetalleProducto />} />
+                <Route path="/nuevo-articulo" element={<NuevoArticulo />} />
+                <Route path="/editar-articulo/:id" element={<NuevoArticulo />} />
+                <Route path="/articulos" element={<TablaArticulos />} />
                 <Route path="/contacto" element={<Navigate to="/contactos" replace />} />
                 {/* La ruta comodín queda al final para no tapar las rutas específicas. */}
                 <Route path="*" element={<NoEncontrado />} />

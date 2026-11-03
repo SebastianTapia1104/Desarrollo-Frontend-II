@@ -6,20 +6,14 @@ import { useInventario } from "../context/InventarioContext.jsx";
 import { useSesion } from "../context/SesionContext.jsx";
 import { SALAS } from "../data/salas.js";
 import useTitulo from "../hooks/useTitulo.js";
-import { decodificarSegmento, formatoPrecio } from "../utils/formato.js";
+import { formatoPrecio } from "../utils/formato.js";
 
 export default function DetalleProducto() {
-  const { sala: salaParam, id: idParam } = useParams();
+  const { sala: salaId, id } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
   const { productos } = useInventario();
   const { sesion } = useSesion();
-
-  const segmentos = location.pathname.split("/").filter(Boolean);
-  const salaDesdeRuta = decodificarSegmento(segmentos[1] ?? "");
-  const idDesdeRuta = decodificarSegmento(segmentos[2] ?? "");
-  const salaId = salaParam ?? salaDesdeRuta;
-  const id = idParam ?? idDesdeRuta;
   const sala = SALAS.find((item) => item.id === salaId) ?? null;
   const producto = productos.find((item) => item.id === id) ?? null;
   const stock = producto?.stockPorSala?.[salaId];
@@ -49,7 +43,7 @@ export default function DetalleProducto() {
         <span aria-hidden="true">/</span>
         <span>{sala.nombre}</span>
         <span aria-hidden="true">/</span>
-        <span>{idDesdeRuta}</span>
+        <span>{id}</span>
       </nav>
 
       {!puedeEditar ? (

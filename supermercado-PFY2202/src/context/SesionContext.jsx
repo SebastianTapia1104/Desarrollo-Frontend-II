@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { buscarCuenta, cuentaPorId } from "../data/salas.js";
+import { guardarLocal, quitarLocal } from "../utils/almacen.js";
 
 const CLAVE = "pfy2202-sesion";
 const SesionContext = createContext(null);
@@ -20,9 +21,9 @@ export function SesionProvider({ children }) {
 
   useEffect(() => {
     if (sesion) {
-      localStorage.setItem(CLAVE, JSON.stringify(sesion));
+      guardarLocal(CLAVE, sesion);
     } else {
-      localStorage.removeItem(CLAVE);
+      quitarLocal(CLAVE);
     }
   }, [sesion]);
 

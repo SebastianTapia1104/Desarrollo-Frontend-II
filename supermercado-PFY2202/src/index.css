@@ -1,3 +1,17 @@
+@import "tailwindcss" important;
+
+@theme {
+  --color-verde: #1e3f32;
+  --color-verde-oscuro: #13281f;
+  --color-caqui: #c6b07a;
+  --color-papel: #f7f1e3;
+  --color-crema: #ebe2cc;
+  --color-tinta: #1a2118;
+  --font-titulo: "Outfit", "Segoe UI", sans-serif;
+  --font-ui: "Barlow", "Segoe UI", sans-serif;
+  --font-texto: "Source Sans 3", "Segoe UI", sans-serif;
+}
+
 :root {
   --verde: #1e3f32;
   --verde-oscuro: #13281f;
@@ -15,9 +29,9 @@
   --rojo-suave: #f4e4de;
   --sombra: none;
   --radio: 18px;
-  --fuente: "Literata", Georgia, serif;
+  --fuente: "Source Sans 3", "Segoe UI", sans-serif;
   --fuente-ui: "Barlow", "Segoe UI", sans-serif;
-  --fuente-titulo: "Fraunces", Georgia, serif;
+  --fuente-titulo: "Outfit", "Segoe UI", sans-serif;
   --menu-alto: 4.4rem;
 }
 

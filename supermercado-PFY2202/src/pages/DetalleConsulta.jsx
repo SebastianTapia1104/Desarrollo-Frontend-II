@@ -4,19 +4,16 @@ import { esParticipante, estaCerrada, useConsultas } from "../context/ConsultasC
 import { useSesion } from "../context/SesionContext.jsx";
 import { etiquetaCuenta } from "../data/salas.js";
 import useTitulo from "../hooks/useTitulo.js";
-import { decodificarSegmento, formatoFecha } from "../utils/formato.js";
+import { formatoFecha } from "../utils/formato.js";
 
 export default function DetalleConsulta() {
-  const { id: idParam } = useParams();
+  const { id } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
   const { sesion } = useSesion();
   const { consultas, responder, marcarResuelta } = useConsultas();
   const [respuesta, setRespuesta] = useState("");
   const [error, setError] = useState("");
-
-  const segmento = decodificarSegmento(location.pathname.split("/").filter(Boolean)[1] ?? "");
-  const id = idParam ?? segmento;
   const consulta = consultas.find((item) => item.id === id) ?? null;
   const participa = Boolean(consulta && sesion && esParticipante(consulta, sesion.id));
   const cerrada = consulta ? estaCerrada(consulta) : false;
@@ -63,7 +60,7 @@ export default function DetalleConsulta() {
       <nav className="miga" aria-label="Miga de pan">
         <Link to="/contactos">Contactos</Link>
         <span aria-hidden="true">/</span>
-        <span>{segmento}</span>
+        <span>{id}</span>
       </nav>
 
       <div className="celda celda--hero celda--banda">

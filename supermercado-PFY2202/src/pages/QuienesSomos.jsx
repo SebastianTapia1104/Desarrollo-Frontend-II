@@ -1,3 +1,4 @@
+import { useInventario } from "../context/InventarioContext.jsx";
 import { CUENTAS } from "../data/salas.js";
 import useTitulo from "../hooks/useTitulo.js";
 
@@ -28,6 +29,7 @@ const SECCIONES = [
       "Inventario es el inicio: ahí se elige la sala y se ve su stock.",
       "Quiénes somos explica la cadena y el funcionamiento de cada parte.",
       "Contactos junta los datos públicos de las sedes y los mensajes internos.",
+      "Ingresar artículo y Tabla de inventario están arriba, a la izquierda del acceso de la sala.",
       "Ingresar está en la esquina superior. Salir cierra la sesión de esa sala.",
     ],
   },
@@ -37,7 +39,7 @@ const SECCIONES = [
     pasos: [
       "Elige la sala en la fila de arriba. El resumen de unidades cambia con ella.",
       "Abre la ficha de un producto para ver pasillo, precio y objetivo de sala.",
-      "Para reponer o descontar, entra con el usuario de esa sede.",
+      "Para reponer o descontar, entra con el usuario de esa sede. El número del stock se puede pulsar para escribir la cantidad.",
       "Si estás en otra sala, el aviso te lleva de vuelta a la tuya.",
     ],
   },
@@ -54,8 +56,12 @@ const SECCIONES = [
   },
 ];
 
+const ANIO_INICIO = 1998;
+
 export default function QuienesSomos() {
   useTitulo("Quiénes somos");
+  const { productos } = useInventario();
+  const anios = new Date().getFullYear() - ANIO_INICIO;
 
   return (
     <article className="pagina">
@@ -64,21 +70,25 @@ export default function QuienesSomos() {
           <p className="eyebrow">La cadena</p>
           <h1>Quiénes somos</h1>
           <p className="lead">
-            Supermercado PFY2202 partió en San Bernardo. Hoy opera tres salas —San Bernardo,
-            La Pintana y Puente Alto— y cada una cuida su propia góndola.
+            Supermercado PFY2202 partió en San Bernardo. Hoy opera tres salas San Bernardo,
+            La Pintana y Puente Alto, y cada una cuida su propia góndola.
           </p>
         </div>
         <p className="estadistica celda">
           <strong>3</strong>
-          <span>salas en la Región Metropolitana</span>
+          <span>Salas en la Región Metropolitana</span>
         </p>
         <p className="estadistica celda">
           <strong>90</strong>
-          <span>personas en el equipo</span>
+          <span>Personas en el equipo</span>
         </p>
-        <p className="estadistica celda celda--doble">
-          <strong>2.400</strong>
-          <span>productos activos</span>
+        <p className="estadistica celda">
+          <strong>{productos.length}</strong>
+          <span>Productos activos</span>
+        </p>
+        <p className="estadistica celda">
+          <strong>{anios}</strong>
+          <span>Años en funcionamiento</span>
         </p>
       </section>
 

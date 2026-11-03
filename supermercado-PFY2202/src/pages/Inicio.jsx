@@ -82,15 +82,19 @@ export default function Inicio() {
 
         <p className="estadistica celda">
           <strong>{inventario.length}</strong>
-          <span>productos</span>
+          <span>Productos</span>
         </p>
         <p className="estadistica celda">
           <strong>{unidades}</strong>
-          <span>unidades en sala</span>
+          <span>Unidades en sala</span>
         </p>
-        <p className="estadistica estadistica--alerta celda celda--doble">
+        <p className="estadistica celda">
           <strong>{alertas}</strong>
-          <span>alertas de stock</span>
+          <span>Alertas de stock</span>
+        </p>
+        <p className="estadistica celda">
+          <strong>{new Set(inventario.map((producto) => producto.categoria || producto.tipo)).size}</strong>
+          <span>Categorías</span>
         </p>
 
         <section className="celda celda--banda filtros" aria-label="Filtros del inventario">
@@ -104,7 +108,7 @@ export default function Inicio() {
             />
           </label>
 
-          <div className="chips" role="group" aria-label="Categorías">
+          <div className="chips chips--categorias" role="group" aria-label="Categorías">
             {categorias.map((item) => (
               <button
                 key={item}
