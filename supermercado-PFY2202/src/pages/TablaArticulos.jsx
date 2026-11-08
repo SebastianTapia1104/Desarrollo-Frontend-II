@@ -1,8 +1,10 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router";
+import Aviso from "../components/Aviso.jsx";
 import { useInventario } from "../context/InventarioContext.jsx";
 import { useSesion } from "../context/SesionContext.jsx";
 import { SALAS } from "../data/salas.js";
+import useAviso from "../hooks/useAviso.js";
 import useTitulo from "../hooks/useTitulo.js";
 import { formatoPrecio } from "../utils/formato.js";
 
@@ -10,19 +12,20 @@ export default function TablaArticulos() {
   useTitulo("Tabla de inventario");
   const { productos, eliminarArticulo } = useInventario();
   const { sesion } = useSesion();
-  const location = useLocation();
-  const [ocultarAviso, setOcultarAviso] = useState(false);
-  const [avisoLocal, setAvisoLocal] = useState("");
+  const { texto, mostrar, cerrar } = useAviso();
+  const [categoria, setCategoria] = useState("Todas");
   const [confirmarId, setConfirmarId] = useState(null);
   const sala = sesion?.tipo === "sala" ? sesion : null;
-  const aviso = avisoLocal || location.state?.aviso || "";
   const salaEnlace = sala?.id ?? "san-bernardo";
+  const categorias = ["Todas", ...new Set(productos.map((producto) => producto.categoria || producto.tipo))];
+  const visibles = productos.filter(
+    (producto) => categoria === "Todas" || (producto.categoria || producto.tipo) === categoria
+  );
 
   function eliminar(id) {
     const ok = eliminarArticulo(id);
     setConfirmarId(null);
-    setOcultarAviso(false);
-    setAvisoLocal(
+    mostrar(
       ok
         ? "El artículo se eliminó del inventario de las tres salas."
         : "Inicia sesión en una sala para eliminar un artículo."
@@ -39,18 +42,21 @@ export default function TablaArticulos() {
           ? ` Editar y eliminar está disponible con la sesión de ${sala.nombre}.`
           : " Para editar o eliminar, inicia sesión en una sala."}
       </p>
-      <Link to="/" className="boton boton--secundario mt-4">
+      <Link to="/inventario" className="boton boton--secundario mt-4">
         Volver al inventario
       </Link>
-
-      {aviso && !ocultarAviso ? (
-        <p className="aviso mt-4" role="status">
-          <span>{aviso}</span>
-          <button type="button" onClick={() => setOcultarAviso(true)}>
-            Cerrar
-          </button>
-        </p>
-      ) : null}
+      <label className="mt-4 flex flex-wrap items-center gap-2 font-ui text-sm font-semibold">
+        Categoría
+        <select value={categoria} onChange={(evento) => setCategoria(evento.target.value)} className="rounded-lg border border-caqui bg-papel px-3 py-2">
+          {categorias.map((item) => (
+            <option key={item} value={item}>{item}</option>
+          ))}
+        </select>
+      </label>
+      <p className="mt-2 font-texto" role="status">
+        Mostrando {visibles.length} de {productos.length} artículos. El filtro no modifica el inventario.
+      </p>
+      <Aviso onCerrar={cerrar}>{texto}</Aviso>
 
       <div className="mt-6 overflow-x-auto rounded-2xl border border-caqui bg-papel">
         <table className="w-full min-w-[52rem] border-collapse text-left">
@@ -70,7 +76,7 @@ export default function TablaArticulos() {
             </tr>
           </thead>
           <tbody className="font-texto text-base text-tinta">
-            {productos.map((producto) => (
+            {visibles.map((producto) => (
               <tr key={producto.id} className="border-t border-caqui/70">
                 <td className="px-4 py-3">
                   <Link
@@ -91,20 +97,22 @@ export default function TablaArticulos() {
                 <td className="px-4 py-3">
                   {sala ? (
                     <div className="acciones-articulo">
-                      <Link to={`/editar-articulo/${producto.id}`}>Editar</Link>
                       {confirmarId === producto.id ? (
                         <>
-                          <button type="button" className="peligro" onClick={() => eliminar(producto.id)}>
-                            Confirmar
-                          </button>
                           <button type="button" onClick={() => setConfirmarId(null)}>
                             Cancelar
                           </button>
+                          <button type="button" className="confirmar" onClick={() => eliminar(producto.id)}>
+                            Confirmar
+                          </button>
                         </>
                       ) : (
-                        <button type="button" className="peligro" onClick={() => setConfirmarId(producto.id)}>
-                          Eliminar
-                        </button>
+                        <>
+                          <Link to={`/editar-articulo/${producto.id}`}>Editar</Link>
+                          <button type="button" className="peligro" onClick={() => setConfirmarId(producto.id)}>
+                            Eliminar
+                          </button>
+                        </>
                       )}
                     </div>
                   ) : (

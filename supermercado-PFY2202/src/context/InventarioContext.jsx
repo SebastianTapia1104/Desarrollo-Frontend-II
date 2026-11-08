@@ -3,6 +3,7 @@ import { PRODUCTOS_INICIALES } from "../data/productos.js";
 import { SALAS } from "../data/salas.js";
 import { guardarLocal } from "../utils/almacen.js";
 import { normalizar } from "../utils/formato.js";
+import { validarArticulo } from "../utils/validaciones.js";
 import { useSesion } from "./SesionContext.jsx";
 
 const CLAVE = "pfy2202-inventario";
@@ -121,27 +122,14 @@ function idArticulo(nombre) {
   return `${base || "articulo"}-${Date.now()}`;
 }
 
-function datosArticulo({ nombre, marca, tipo, precio, stock, pasillo }) {
-  const nombreLimpio = nombre.trim();
-  const marcaLimpia = marca.trim();
-  const tipoLimpio = tipo.trim();
-  const precioNumero = Number(precio);
-  const stockNumero = Number(stock);
-  const pasilloLimpio = pasillo.trim();
-
-  if (nombreLimpio.length < 2 || marcaLimpia.length < 2 || tipoLimpio.length < 2) return null;
-  if (!Number.isFinite(precioNumero) || precioNumero < 0) return null;
-  if (!Number.isInteger(stockNumero) || stockNumero < 0 || stockNumero > 999) return null;
-
+function datosArticulo(datos) {
+  const resultado = validarArticulo(datos);
+  if (!resultado.ok) return null;
+  const limpio = resultado.datos;
   return {
-    nombre: nombreLimpio,
-    marca: marcaLimpia,
-    tipo: tipoLimpio,
-    categoria: tipoLimpio,
-    precio: Math.round(precioNumero),
-    pasillo: pasilloLimpio || "1",
-    stock: stockNumero,
-    descripcion: `${nombreLimpio}, de ${marcaLimpia}. Entra al inventario como ${tipoLimpio}.`,
+    ...limpio,
+    categoria: limpio.tipo,
+    descripcion: `${limpio.nombre}, de ${limpio.marca}. Entra al inventario como ${limpio.tipo}.`,
   };
 }
 
@@ -165,6 +153,16 @@ export function InventarioProvider({ children }) {
   function salaActiva() {
     if (!sesion || sesion.tipo !== "sala") return null;
     return sesion.id;
+  }
+
+  function moverStock(salaId, productoId, delta) {
+    const producto = productos.find((item) => item.id === productoId);
+    if (!producto || !Number.isInteger(delta) || delta === 0) return false;
+    const actual = producto.stockPorSala[salaId] ?? 0;
+    const siguiente = actual + delta;
+    if (siguiente < 0 || siguiente > 999) return false;
+    dispatch({ type: "ajustar-stock", salaId, productoId, delta });
+    return true;
   }
 
   function ajustarStock(salaId, productoId, delta) {
@@ -238,7 +236,15 @@ export function InventarioProvider({ children }) {
 
   return (
     <InventarioContext.Provider
-      value={{ productos, ajustarStock, fijarStock, agregarArticulo, actualizarArticulo, eliminarArticulo }}
+      value={{
+        productos,
+        ajustarStock,
+        fijarStock,
+        moverStock,
+        agregarArticulo,
+        actualizarArticulo,
+        eliminarArticulo,
+      }}
     >
       {children}
     </InventarioContext.Provider>

@@ -1,7 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { CONSULTAS_INICIALES } from "../data/consultasIniciales.js";
-import { destinosDe } from "../data/salas.js";
+import { destinosDe, esHiloConCliente } from "../data/salas.js";
 import { guardarLocal } from "../utils/almacen.js";
+import { validarAsunto, validarMensaje, validarRespuesta } from "../utils/validaciones.js";
 import { useSesion } from "./SesionContext.jsx";
 
 const CLAVE = "pfy2202-consultas";
@@ -37,10 +38,10 @@ export function ConsultasProvider({ children }) {
 
   function crearConsulta({ para, asunto, mensaje }) {
     if (!sesion) return null;
-    const destinoValido = destinosDe(sesion.id).some((destino) => destino.id === para);
+    const destinoValido = destinosDe(sesion).some((destino) => destino.id === para);
+    if (!destinoValido || validarAsunto(asunto) || validarMensaje(mensaje)) return null;
     const asuntoLimpio = asunto.trim();
     const texto = mensaje.trim();
-    if (!destinoValido || asuntoLimpio.length < 3 || texto.length < 10) return null;
 
     const ahora = new Date().toISOString();
     const id = `consulta-${Date.now()}`;
@@ -61,8 +62,9 @@ export function ConsultasProvider({ children }) {
   function responder(id, texto) {
     const limpio = texto.trim();
     const actual = consultas.find((consulta) => consulta.id === id);
-    if (!sesion || !actual || limpio.length < 2) return false;
+    if (!sesion || !actual || validarRespuesta(texto)) return false;
     if (!esParticipante(actual, sesion.id) || estaCerrada(actual)) return false;
+    if (sesion.tipo === "administracion" && esHiloConCliente(actual)) return false;
 
     const nuevo = {
       id: `msg-${Date.now()}`,

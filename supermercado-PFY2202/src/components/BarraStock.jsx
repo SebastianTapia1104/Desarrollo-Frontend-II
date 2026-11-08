@@ -5,7 +5,7 @@ export default function BarraStock({ stock, objetivo }) {
   const porcentaje = porcentajeStock(stock, objetivo);
 
   return (
-    <div className={`barra barra--${estado.clave}`}>
+    <div className={`barra barra--${estado.clave} w-full`}>
       <div
         className="barra__pista"
         role="meter"

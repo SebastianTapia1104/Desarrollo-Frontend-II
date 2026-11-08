@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router";
 import { useInventario } from "../context/InventarioContext.jsx";
 import { useSesion } from "../context/SesionContext.jsx";
 import useTitulo from "../hooks/useTitulo.js";
+import { validarArticulo } from "../utils/validaciones.js";
 
 const INICIAL = {
   nombre: "",
@@ -46,22 +47,8 @@ export default function NuevoArticulo() {
   function enviar(evento) {
     evento.preventDefault();
     if (!sala) return;
-    const nuevos = {};
-    if (formulario.nombre.trim().length < 2) {
-      nuevos.nombre = "El nombre debe tener al menos 2 caracteres.";
-    }
-    if (formulario.marca.trim().length < 2) {
-      nuevos.marca = "La marca debe tener al menos 2 caracteres.";
-    }
-    if (formulario.tipo.trim().length < 2) {
-      nuevos.tipo = "El tipo de producto debe tener al menos 2 caracteres.";
-    }
-    if (formulario.precio === "" || Number.isNaN(Number(formulario.precio)) || Number(formulario.precio) < 0) {
-      nuevos.precio = "El precio debe ser un número igual o mayor a 0.";
-    }
-    if (!/^\d+$/.test(formulario.stock) || Number(formulario.stock) > 999) {
-      nuevos.stock = "El stock inicial debe ser un número entero entre 0 y 999.";
-    }
+    const resultado = validarArticulo(formulario);
+    const nuevos = resultado.errores;
     setErrores(nuevos);
     if (Object.keys(nuevos).length > 0) return;
 
@@ -96,7 +83,7 @@ export default function NuevoArticulo() {
           ? `El stock se guarda en ${sala.nombre}. Nombre, marca y tipo se ven en la tabla de las tres salas.`
           : "Para ingresar o editar un artículo tienes que iniciar sesión con una sala. El producto se agrega solo a esa tienda."}
       </p>
-      <Link to="/" className="boton boton--secundario mt-4">
+      <Link to="/inventario" className="boton boton--secundario mt-4">
         Volver al inventario
       </Link>
 
@@ -107,7 +94,7 @@ export default function NuevoArticulo() {
             <li>Inicia sesión con el usuario de San Bernardo, La Pintana o Puente Alto.</li>
             <li>Administración no carga productos en la góndola de una sala.</li>
           </ul>
-          <Link to="/ingresar" state={{ desde: esEdicion ? `/editar-articulo/${id}` : "/nuevo-articulo" }}>
+          <Link to="/ingresar-empresa" state={{ desde: esEdicion ? `/editar-articulo/${id}` : "/nuevo-articulo" }}>
             Ingresar
           </Link>
         </div>

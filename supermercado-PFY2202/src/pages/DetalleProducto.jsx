@@ -1,6 +1,8 @@
 import { useEffect } from "react";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router";
 import BarraStock from "../components/BarraStock.jsx";
+import Boton from "../components/Boton.jsx";
+import BotonAgregar from "../components/carrito/BotonAgregar.jsx";
 import ControlStock from "../components/ControlStock.jsx";
 import { useInventario } from "../context/InventarioContext.jsx";
 import { useSesion } from "../context/SesionContext.jsx";
@@ -35,21 +37,27 @@ export default function DetalleProducto() {
 
   const vista = { ...producto, stock };
   const puedeEditar = sesion?.tipo === "sala" && sesion.id === sala.id;
+  const esCliente = sesion?.tipo === "cliente";
+  const volver = esCliente || !sesion ? `/?sala=${sala.id}` : `/inventario?sala=${sala.id}`;
 
   return (
     <article className="pagina">
       <nav className="miga" aria-label="Miga de pan">
-        <Link to={`/?sala=${sala.id}`}>Inventario</Link>
+        <Link to={volver}>{esCliente || !sesion ? "Supermercado" : "Inventario"}</Link>
         <span aria-hidden="true">/</span>
         <span>{sala.nombre}</span>
         <span aria-hidden="true">/</span>
         <span>{id}</span>
       </nav>
 
-      {!puedeEditar ? (
+      {!esCliente && !puedeEditar ? (
         <div className="aviso">
-          <span>El stock de esta ficha solo lo actualiza la sala con sesión iniciada.</span>
-          <Link to="/ingresar" state={{ desde: location.pathname }}>
+          <span>
+            {sesion
+              ? "El stock de esta ficha solo lo actualiza la sala con sesión iniciada."
+              : "Para comprar, entra como cliente. El stock de la sala lo actualiza su propio acceso."}
+          </span>
+          <Link to={sesion ? "/ingresar-empresa" : "/ingresar"} state={{ desde: location.pathname }}>
             Ingresar
           </Link>
         </div>
@@ -83,14 +91,22 @@ export default function DetalleProducto() {
         </div>
         <div className="celda celda--banda ficha__stock">
           <h2>Stock actual</h2>
-          <ControlStock producto={vista} salaId={sala.id} puedeEditar={puedeEditar} anunciar />
+          {puedeEditar ? <ControlStock producto={vista} salaId={sala.id} puedeEditar anunciar /> : null}
           <BarraStock stock={stock} objetivo={producto.stockObjetivo} />
+          {esCliente || !sesion ? (
+            <div className="mt-4">
+              <p className="mb-3 font-texto">
+                Hay {stock} {stock === 1 ? "unidad disponible" : "unidades disponibles"} en {sala.nombre}.
+              </p>
+              <BotonAgregar salaId={sala.id} productoId={producto.id} stock={stock} />
+            </div>
+          ) : null}
         </div>
       </section>
 
-      <Link to={`/?sala=${sala.id}`} className="boton boton--secundario">
-        Volver al inventario
-      </Link>
+      <Boton to={volver} variante="secundario" className="mt-4">
+        {esCliente || !sesion ? "Volver al supermercado" : "Volver al inventario"}
+      </Boton>
     </article>
   );
 }

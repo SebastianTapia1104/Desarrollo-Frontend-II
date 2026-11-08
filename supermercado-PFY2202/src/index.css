@@ -63,9 +63,7 @@ textarea,
 .eyebrow,
 .menu-inferior__link,
 .pill,
-.tabla th,
-.encabezado__sala,
-.encabezado__salir {
+.tabla th {
   font-family: var(--fuente-ui);
 }
 

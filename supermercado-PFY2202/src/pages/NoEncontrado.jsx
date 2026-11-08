@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import useTitulo from "../hooks/useTitulo.js";
 
 export default function NoEncontrado() {

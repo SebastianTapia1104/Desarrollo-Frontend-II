@@ -68,7 +68,16 @@ export function etiquetaCuenta(id) {
   return `Sala ${cuenta.nombre}`;
 }
 
-export function destinosDe(cuentaId) {
-  if (cuentaId === ADMINISTRACION.id) return SALAS;
-  return [...SALAS.filter((sala) => sala.id !== cuentaId), ADMINISTRACION];
+export function esCuentaEmpresa(id) {
+  return CUENTAS.some((cuenta) => cuenta.id === id);
+}
+
+export function destinosDe(sesion) {
+  if (!sesion) return [];
+  if (sesion.tipo === "cliente" || sesion.tipo === "administracion") return SALAS;
+  return [...SALAS.filter((sala) => sala.id !== sesion.id), ADMINISTRACION];
+}
+
+export function esHiloConCliente(consulta) {
+  return !esCuentaEmpresa(consulta.de) || !esCuentaEmpresa(consulta.para);
 }

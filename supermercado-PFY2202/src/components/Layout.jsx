@@ -1,3 +1,4 @@
+import PanelCarrito from "./carrito/PanelCarrito.jsx";
 import Encabezado from "./Encabezado.jsx";
 import MenuInferior from "./MenuInferior.jsx";
 
@@ -9,6 +10,7 @@ export default function Layout({ children }) {
         {children}
       </main>
       <MenuInferior />
+      <PanelCarrito />
     </div>
   );
 }

@@ -1,4 +1,6 @@
 import { useInventario } from "../context/InventarioContext.jsx";
+import TablaCredenciales from "../components/TablaCredenciales.jsx";
+import { CLIENTE_DEMO } from "../data/clientes.js";
 import { CUENTAS } from "../data/salas.js";
 import useTitulo from "../hooks/useTitulo.js";
 
@@ -26,11 +28,11 @@ const SECCIONES = [
     titulo: "Cómo moverse",
     texto: "El sitio es una sola aplicación. El menú de abajo cambia la sección y la dirección del navegador, pero no recarga la página. El botón Atrás del navegador vuelve a la vista anterior y conserva lo que ya ajustaste.",
     pasos: [
-      "Inventario es el inicio: ahí se elige la sala y se ve su stock.",
+      "Supermercado es la primera pantalla: el cliente elige la sala y el carrito se abre al añadir un producto. Cambiar de sala con artículos pide confirmación, porque la otra sala puede no tener el mismo stock.",
+      "Inventario aparece en el menú cuando entra una sala o administración.",
       "Quiénes somos explica la cadena y el funcionamiento de cada parte.",
       "Contactos junta los datos públicos de las sedes y los mensajes internos.",
-      "Ingresar artículo y Tabla de inventario están arriba, a la izquierda del acceso de la sala.",
-      "Ingresar está en la esquina superior. Salir cierra la sesión de esa sala.",
+      "Ingresar artículo y Tabla de inventario están arriba, solo con acceso de empresa.",
     ],
   },
   {
@@ -45,7 +47,7 @@ const SECCIONES = [
   },
   {
     titulo: "Contactos",
-    texto: "Hay dos usos distintos en la misma página. El bloque Contacto para externos muestra dirección, horario, teléfono y correo de las tres salas y de la casa matriz. Esa información se ve siempre, con o sin sesión. Más abajo están los mensajes de trabajo: una sala escribe a otra sala o a administración.",
+    texto: "Hay dos usos distintos en la misma página. El bloque de sedes se ve siempre. Un cliente escribe solo a una sala. Una sala escribe a otra sala o a administración, y responde a un cliente si ese cliente escribió primero. Administración solo escribe a las salas.",
     pasos: [
       "Sin sesión solo se ven los datos públicos. El historial interno queda oculto.",
       "Con sesión eliges el destino, escribes el asunto y el mensaje. La consulta nace Pendiente.",
@@ -121,40 +123,11 @@ export default function QuienesSomos() {
         </ol>
       </section>
 
-      <section className="bloque">
-        <h2>Accesos de demostración</h2>
-        <div className="celda">
-        <p className="lead">
-          Las claves viven en el navegador, para poder probar el sitio sin un servidor.
-          Administración existe para responder y cerrar las consultas que le envían las salas.
-        </p>
-        <div className="tabla-contenedor">
-        <table className="tabla">
-          <caption className="sr-only">Usuarios y claves de cada acceso</caption>
-          <thead>
-            <tr>
-              <th>Acceso</th>
-              <th>Usuario</th>
-              <th>Clave</th>
-            </tr>
-          </thead>
-          <tbody>
-            {CUENTAS.map((cuenta) => (
-              <tr key={cuenta.id}>
-                <td>{cuenta.tipo === "sala" ? `Sala ${cuenta.nombre}` : cuenta.nombre}</td>
-                <td>
-                  <code>{cuenta.usuario}</code>
-                </td>
-                <td>
-                  <code>{cuenta.clave}</code>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        </div>
-        </div>
-      </section>
+      <TablaCredenciales
+        cuentas={[CLIENTE_DEMO, ...CUENTAS]}
+        titulo="Accesos de demostración"
+        descripcion="Las claves viven en el navegador. El cliente compra en el supermercado. Las salas y administración entran por el ingreso de administración."
+      />
     </article>
   );
 }

@@ -1,21 +1,28 @@
 import { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router";
 import { esParticipante, estaCerrada, useConsultas } from "../context/ConsultasContext.jsx";
 import { useSesion } from "../context/SesionContext.jsx";
-import { etiquetaCuenta } from "../data/salas.js";
+import { clientePorId } from "../data/clientes.js";
+import { esCuentaEmpresa, esHiloConCliente, etiquetaCuenta } from "../data/salas.js";
 import useTitulo from "../hooks/useTitulo.js";
 import { formatoFecha } from "../utils/formato.js";
+import { validarRespuesta } from "../utils/validaciones.js";
 
 export default function DetalleConsulta() {
   const { id } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
-  const { sesion } = useSesion();
+  const { sesion, clientes } = useSesion();
   const { consultas, responder, marcarResuelta } = useConsultas();
   const [respuesta, setRespuesta] = useState("");
   const [error, setError] = useState("");
   const consulta = consultas.find((item) => item.id === id) ?? null;
-  const participa = Boolean(consulta && sesion && esParticipante(consulta, sesion.id));
+  const participa = Boolean(
+    consulta &&
+      sesion &&
+      esParticipante(consulta, sesion.id) &&
+      !(sesion.tipo === "administracion" && esHiloConCliente(consulta))
+  );
   const cerrada = consulta ? estaCerrada(consulta) : false;
 
   useTitulo(consulta ? consulta.asunto : "Consulta");
@@ -39,8 +46,9 @@ export default function DetalleConsulta() {
 
   function enviarRespuesta(evento) {
     evento.preventDefault();
-    if (respuesta.trim().length < 2) {
-      setError("Escribe una respuesta de al menos 2 caracteres.");
+    const errorRespuesta = validarRespuesta(respuesta);
+    if (errorRespuesta) {
+      setError(errorRespuesta);
       return;
     }
     const ok = responder(consulta.id, respuesta);
@@ -65,7 +73,7 @@ export default function DetalleConsulta() {
 
       <div className="celda celda--hero celda--banda">
         <p className="eyebrow">
-          {etiquetaCuenta(consulta.de)} → {etiquetaCuenta(consulta.para)}
+          {nombreParticipante(consulta.de, clientes)} → {nombreParticipante(consulta.para, clientes)}
         </p>
         <div className="titulo-estado">
           <h1>{consulta.asunto}</h1>
@@ -86,7 +94,7 @@ export default function DetalleConsulta() {
           const soyYo = parte === sesion.id;
           return (
             <li key={parte}>
-              <strong>{soyYo ? "Tú" : etiquetaCuenta(parte)}</strong>
+              <strong>{soyYo ? "Tú" : nombreParticipante(parte, clientes)}</strong>
               <span className={lista ? "pill pill--resuelta" : "pill pill--pendiente"}>
                 {lista ? "Resuelta" : "Pendiente"}
               </span>
@@ -104,7 +112,7 @@ export default function DetalleConsulta() {
         {consulta.mensajes.map((mensaje) => (
           <li key={mensaje.id} className={mensaje.autor === sesion.id ? "hilo__item hilo__item--mio" : "hilo__item"}>
             <p className="hilo__autor">
-              {mensaje.autor === sesion.id ? "Tú" : etiquetaCuenta(mensaje.autor)}
+              {mensaje.autor === sesion.id ? "Tú" : nombreParticipante(mensaje.autor, clientes)}
               <span>{formatoFecha(mensaje.fecha)}</span>
             </p>
             <p>{mensaje.texto}</p>
@@ -117,7 +125,7 @@ export default function DetalleConsulta() {
       ) : (
         <form className="formulario" onSubmit={enviarRespuesta}>
           <div className="campo">
-            <label htmlFor="respuesta-consulta">Responder a {etiquetaCuenta(otraParte)}</label>
+            <label htmlFor="respuesta-consulta">Responder a {nombreParticipante(otraParte, clientes)}</label>
             <textarea
               id="respuesta-consulta"
               rows="4"
@@ -143,4 +151,9 @@ export default function DetalleConsulta() {
       </Link>
     </article>
   );
+}
+
+function nombreParticipante(id, clientes) {
+  if (esCuentaEmpresa(id)) return etiquetaCuenta(id);
+  return clientePorId(clientes, id)?.nombre ?? "Cliente";
 }

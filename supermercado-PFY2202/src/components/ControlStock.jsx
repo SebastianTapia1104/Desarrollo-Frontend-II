@@ -21,7 +21,7 @@ export default function ControlStock({ producto, salaId, puedeEditar, anunciar =
   }
 
   return (
-    <div className="control">
+    <div className="control w-fit justify-self-start">
       <button
         type="button"
         onClick={() => ajustarStock(salaId, producto.id, -1)}
